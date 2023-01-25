@@ -1,0 +1,60 @@
+---
+title: "Life Expectancy Prediction"
+author: "BinaryBrains"
+date: "2022-11-26"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Life Expectancy Prediction
+```{r}
+library("BSDA")
+library(readxl)
+data <- read_excel("C:/Users/HP/OneDrive/Documents/R/Dataset/data1.xlsx")
+head(data)
+```
+```{r}
+m=mean(data$winsorized_Life_Expectancy)
+```
+
+```{r}
+data2015<-subset(data,data$Year==2015)
+head(data2015)
+
+```
+```{r}
+less65<-subset(data2015,data2015$Life_Expectancy<65)
+greater65<- subset(data2015 , data2015$Life_Expectancy>=65)
+head(greater65)
+```
+
+```{r}
+samplehigh65=sample(greater65$winsorized_Percentage_Exp,35)
+samplelow65=sample(less65$winsorized_Percentage_Exp,35)
+```
+
+```{r}
+sd_x=sd(samplehigh65)
+sd_y=sd(samplelow65)
+```
+
+```{r}
+
+z.test(
+  x=samplehigh65,
+  y=samplelow65, 
+  mu=0, 
+  sigma.x=sd_x,
+  sigma.y=sd_y,
+  alternative ="two.sided"
+  ,conf.level = 0.95)
+```
+
+According to the result the countries that expend more on percentage expenditure have the same life expectency as those with low expenditure.This might also be due to faulty data For example Afganistan and Algeria have high life expectency but this might be due to bad data collection.
+
+
+
+
